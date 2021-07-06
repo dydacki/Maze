@@ -1,0 +1,14 @@
+[Pp]ackages/
+[Ss]tage/
+**/[Oo]bj/
+**/[Bb]in/
+*.suo
+*.user
+*.[Cc]ache
+*.[Rr]esharper*
+*.log
+*.mdf
+*.ldf
+[Pp]ackages.dgml
+.vs/
+*.log
