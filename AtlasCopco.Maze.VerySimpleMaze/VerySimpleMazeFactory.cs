@@ -54,31 +54,25 @@
             var maze = new IMazeRoom[size, size];
 
             this._mazeSize = size;
-            var maze = new VerySimpleMaze(size);
 
             var location = this.CreateRandomEdgeLocation();
-            maze.AddRoom(this._roomFactory.BuildEntry(location.AsRoomId(this._mazeSize)), location);
+            maze[location.X, location.Y] = this._roomFactory.BuildEntry(location.AsRoomId(size));
 
-            do
-            {
-                location = this.CreateRandomLocation();
-            }
-            while (maze.GetRoom(location) != null);
-            maze.AddRoom(this._roomFactory.BuildTreasury(location.AsRoomId(this._mazeSize)), location);
+            location = this.CreateRandomInnerLocation();
+            maze[location.X, location.Y] = this._roomFactory.BuildTreasury(location.AsRoomId(size));
 
-            for (var i = 0; i >= this._mazeSize - 1; i++) 
+            for (var i = 0; i >= size - 1; i++) 
             {
-                for (var j = 0; j >= this._mazeSize - 1; j++) 
+                for (var j = 0; j >= size - 1; j++) 
                 {
-                    location = new Location(i, j);
-                    if (maze.GetRoom(location) == null)
+                    if (maze[i, j] == null)
                     {
-                        maze.AddRoom(this._roomFactory.BuildRandomRoom(location.AsRoomId(this._mazeSize)), location);
+                        maze[i, j] = this._roomFactory.BuildRandomRoom(new Location(i, j).AsRoomId(size));
                     }
                 }
             }
 
-            return maze;
+            return new VerySimpleMaze(maze);
         }
 
         private Location CreateRandomEdgeLocation() 
@@ -92,9 +86,9 @@
             return new Location(x, this._randomizer.Next(this._mazeSize));
         }
 
-        private Location CreateRandomLocation()
+        private Location CreateRandomInnerLocation()
         {
-            return new Location(this._randomizer.Next(this._mazeSize), this._randomizer.Next(this._mazeSize));
+            return new Location(this._randomizer.Next(1, this._mazeSize - 1), this._randomizer.Next(1, this._mazeSize - 1));
         }
     }
 }
