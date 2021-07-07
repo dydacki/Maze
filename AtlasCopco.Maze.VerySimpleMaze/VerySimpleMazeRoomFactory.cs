@@ -10,6 +10,17 @@
     public class VerySimpleMazeRoomFactory
     {
         private IMazeRoomTrapFactory _trapFactory;
+        private Random _randomizer;
+
+        public VerySimpleMazeRoomFactory() : this(new VerySimpleRoomTrapFactory(), new Random())
+        {
+        }
+
+        public VerySimpleMazeRoomFactory(IMazeRoomTrapFactory trapFactory, Random randomizer)
+        {
+            this._trapFactory = trapFactory;
+            this._randomizer = randomizer;
+        }
 
         public IMazeRoom BuildEntry(int roomId)
         {
@@ -35,7 +46,7 @@
                                                && !new[] { typeof(Entry), typeof(Treasury) }.Contains(t))
                                         .OrderBy(t => t.Name);
 
-            return roomTypeNames.ElementAt(new Random().Next(roomTypeNames.Count()));
+            return roomTypeNames.ElementAt(this._randomizer.Next(roomTypeNames.Count()));
         }
 
         private IMazeRoom CreateRandomMazeRoomOfType(Type type, int roomId)
