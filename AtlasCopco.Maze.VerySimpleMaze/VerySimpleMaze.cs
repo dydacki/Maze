@@ -3,13 +3,13 @@
     using System;
 
     using AtlasCopco.Maze.Core;
-    using AtlasCopco.Maze.VerySimpleMaze.Extensions;
+    using AtlasCopco.Maze.VerySimpleMaze.Helpers;
 
     public class VerySimpleMaze : IMaze
     {
-        public VerySimpleMaze(int size) 
+        public VerySimpleMaze(IMazeRoom[,] mazeRooms) 
         {
-            this.MazeRooms = new IMazeRoom[size, size];
+            this.MazeRooms = mazeRooms;
         }
 
         public int Length => this.MazeRooms.GetLength(0);

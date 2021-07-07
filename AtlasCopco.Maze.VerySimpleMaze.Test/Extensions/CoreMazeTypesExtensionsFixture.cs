@@ -3,7 +3,7 @@
     using System;
 
     using AtlasCopco.Maze.Core;
-    using AtlasCopco.Maze.VerySimpleMaze.Extensions;
+    using AtlasCopco.Maze.VerySimpleMaze.Helpers;
     using NUnit.Framework;
 
     [TestFixture]

@@ -9,6 +9,8 @@
 
     public class VerySimpleMazeRoomFactory
     {
+        private IMazeRoomTrapFactory _trapFactory;
+
         public IMazeRoom BuildEntry(int roomId)
         {
             return this.CreateRandomMazeRoomOfType(typeof(Entry), roomId);
@@ -19,7 +21,7 @@
             return this.CreateRandomMazeRoomOfType(typeof(Treasury), roomId);
         }
 
-        public IMazeRoom BuildRandomRoom(int roomId) 
+        public IMazeRoom BuildRandomRoom(int roomId)
         {
             return this.CreateRandomMazeRoomOfType(this.GetRandomRoomType(), roomId);
         }
@@ -30,13 +32,19 @@
                                         .GetTypes()
                                         .Where(t => t.Namespace == "AtlasCopco.Maze.VerySimpleMaze.Rooms"
                                                && t.IsClass
-                                               && !new[] { typeof(Entry), typeof(Treasury) }.Contains(t));
+                                               && !new[] { typeof(Entry), typeof(Treasury) }.Contains(t))
+                                        .OrderBy(t => t.Name);
 
             return roomTypeNames.ElementAt(new Random().Next(roomTypeNames.Count()));
         }
 
         private IMazeRoom CreateRandomMazeRoomOfType(Type type, int roomId)
         {
+            if (type == typeof(MazeTrapRoom))
+            {
+                return Activator.CreateInstance(type, roomId, this._trapFactory.CreateTrapFor(type)) as IMazeRoom;
+            }
+
             return Activator.CreateInstance(type, roomId) as IMazeRoom;
         }
     }

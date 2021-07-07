@@ -4,18 +4,18 @@
 
     using AtlasCopco.Integration.Maze;
     using AtlasCopco.Maze.Core;
-    using AtlasCopco.Maze.VerySimpleMaze.Extensions;
+    using AtlasCopco.Maze.VerySimpleMaze.Helpers;
 
-    public class VerySimpleMazeImplementation : IMazeIntegration
+    public class VerySimpleMazeFacade : IMazeIntegration
     {
         private IMaze _maze;
         private IMazeFactory _mazeFactory;
 
-        public VerySimpleMazeImplementation() : this(new VerySimpleMazeFactory())
+        public VerySimpleMazeFacade() : this(new VerySimpleMazeFactory())
         {
         }
 
-        public VerySimpleMazeImplementation(IMazeFactory mazeFactory) 
+        public VerySimpleMazeFacade(IMazeFactory mazeFactory) 
         {
             this._mazeFactory = mazeFactory;
         }

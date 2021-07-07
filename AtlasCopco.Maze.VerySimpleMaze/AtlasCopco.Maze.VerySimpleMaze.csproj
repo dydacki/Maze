@@ -41,20 +41,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions\CoreMazeTypesExtensions.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Helpers\CoreMazeTypesExtensions.cs" />
+    <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Rooms\Desert.cs" />
     <Compile Include="Rooms\Entry.cs" />
     <Compile Include="Rooms\Forest.cs" />
     <Compile Include="Rooms\Hills.cs" />
+    <Compile Include="Rooms\IMazeRoomTrapFactory.cs" />
     <Compile Include="Rooms\Marsh.cs" />
     <Compile Include="Rooms\Traps\DehydrationTrap.cs" />
     <Compile Include="Rooms\Traps\SinkingTrap.cs" />
     <Compile Include="Rooms\Treasury.cs" />
+    <Compile Include="Rooms\VerySimpleRoomTrapFactory.cs" />
     <Compile Include="VerySimpleMaze.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VerySimpleMazeFactory.cs" />
-    <Compile Include="VerySimpleMazeImplementation.cs" />
+    <Compile Include="VerySimpleMazeFacade.cs" />
     <Compile Include="VerySimpleMazeRoomFactory.cs" />
   </ItemGroup>
   <ItemGroup>

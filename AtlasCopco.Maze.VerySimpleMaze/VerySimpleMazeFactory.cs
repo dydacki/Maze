@@ -3,7 +3,7 @@
     using System;
 
     using AtlasCopco.Maze.Core;
-    using AtlasCopco.Maze.VerySimpleMaze.Extensions;
+    using AtlasCopco.Maze.VerySimpleMaze.Helpers;
 
     /// <summary>
     /// Builds and returns an instance of the <see cref="VerySimpleMaze"/> class.
@@ -45,6 +45,8 @@
                 throw new ArgumentOutOfRangeException(
                     "The stage edge cannot be smaller than {0} elements.".InjectInvariant(MinimalMazeSize), nameof(size));
             }
+
+            var maze = new IMazeRoom[size, size];
 
             this._mazeSize = size;
             var maze = new VerySimpleMaze(size);
