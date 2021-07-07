@@ -1,4 +1,4 @@
-﻿namespace AtlasCopco.Maze.VerySimpleMaze.Rooms
+﻿namespace AtlasCopco.Maze.VerySimpleMaze.Rooms.Traps
 {
     using System;
 

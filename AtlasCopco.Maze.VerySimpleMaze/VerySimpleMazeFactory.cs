@@ -56,7 +56,7 @@
             this._mazeSize = size;
 
             var entLocation = this.CreateRandomEdgeLocation();
-            maze[entLocation.X, entLocation.Y] = this._roomFactory.BuildEntry(entLocation.AsRoomId(size));
+            maze[entLocation.X, entLocation.Y] = this._roomFactory.BuildEntrance(entLocation.AsRoomId(size));
 
             var location = this.CreateRandomInnerLocation();
             maze[location.X, location.Y] = this._roomFactory.BuildTreasury(location.AsRoomId(size));

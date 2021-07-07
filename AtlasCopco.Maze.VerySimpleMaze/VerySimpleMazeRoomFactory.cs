@@ -6,6 +6,7 @@
 
     using AtlasCopco.Maze.Core;
     using AtlasCopco.Maze.VerySimpleMaze.Rooms;
+    using AtlasCopco.Maze.VerySimpleMaze.Rooms.Traps;
 
     public class VerySimpleMazeRoomFactory
     {
@@ -22,19 +23,19 @@
             this._randomizer = randomizer;
         }
 
-        public IMazeRoom BuildEntry(int roomId)
+        public IMazeRoom BuildEntrance(int roomId)
         {
-            return this.CreateRandomMazeRoomOfType(typeof(Entry), roomId);
+            return this.CreateMazeRoomOfType(typeof(Entrance), roomId);
         }
 
         public IMazeRoom BuildTreasury(int roomId)
         {
-            return this.CreateRandomMazeRoomOfType(typeof(Treasury), roomId);
+            return this.CreateMazeRoomOfType(typeof(Treasury), roomId);
         }
 
         public IMazeRoom BuildRandomRoom(int roomId)
         {
-            return this.CreateRandomMazeRoomOfType(this.GetRandomRoomType(), roomId);
+            return this.CreateMazeRoomOfType(this.GetRandomRoomType(), roomId);
         }
 
         private Type GetRandomRoomType()
@@ -43,15 +44,15 @@
                                         .GetTypes()
                                         .Where(t => t.Namespace == "AtlasCopco.Maze.VerySimpleMaze.Rooms"
                                                && t.IsClass
-                                               && !new[] { typeof(Entry), typeof(Treasury) }.Contains(t))
+                                               && !new[] { typeof(Entrance), typeof(Treasury) }.Contains(t))
                                         .OrderBy(t => t.Name);
 
             return roomTypeNames.ElementAt(this._randomizer.Next(roomTypeNames.Count()));
         }
 
-        private IMazeRoom CreateRandomMazeRoomOfType(Type type, int roomId)
+        private IMazeRoom CreateMazeRoomOfType(Type type, int roomId)
         {
-            if (type == typeof(MazeTrapRoom))
+            if (type.IsSubclassOf(typeof(MazeTrapRoom)))
             {
                 return Activator.CreateInstance(type, roomId, this._trapFactory.CreateTrapFor(type)) as IMazeRoom;
             }
