@@ -62,8 +62,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions\CoreMazeTypesExtensionsFixture.cs" />
+    <Compile Include="Helpers\CoreMazeTypesExtensionsFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VerySimpleMazeFactoryFixture.cs" />
     <Compile Include="VerySimpleMazeRoomFactoryFixture.cs" />
   </ItemGroup>
   <ItemGroup>
