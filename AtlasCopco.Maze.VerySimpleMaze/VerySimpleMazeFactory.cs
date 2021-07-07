@@ -14,11 +14,12 @@
 
         private int _mazeSize;
         private VerySimpleMazeRoomFactory _roomFactory;
+        private Random _randomizer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VerySimpleMazeFactory"/> class.
         /// </summary>
-        public VerySimpleMazeFactory() : this(new VerySimpleMazeRoomFactory())
+        public VerySimpleMazeFactory() : this(new VerySimpleMazeRoomFactory(), new Random())
         {
         }
 
@@ -28,9 +29,13 @@
         /// <param name="roomFactory">
         /// An instance of the <see cref="VerySimpleMazeRoomFactory"/> class.
         /// </param>
-        public VerySimpleMazeFactory(VerySimpleMazeRoomFactory roomFactory) 
+        /// <param name="randomizer">
+        /// An instance of the <see cref="Random"/> class.
+        /// </param>
+        public VerySimpleMazeFactory(VerySimpleMazeRoomFactory roomFactory, Random randomizer) 
         {
             this._roomFactory = roomFactory;
+            this._randomizer = randomizer;
         }
 
         /// <summary>
@@ -77,22 +82,19 @@
         }
 
         private Location CreateRandomEdgeLocation() 
-        {
-            var randomizer = new Random();
-            var x = randomizer.Next(this._mazeSize);
-
+        {            
+            var x = this._randomizer.Next(this._mazeSize);
             if (x != 0) 
             {
                 return new Location(x, 0);
             }
 
-            return new Location(x, randomizer.Next(this._mazeSize));
+            return new Location(x, this._randomizer.Next(this._mazeSize));
         }
 
         private Location CreateRandomLocation()
         {
-            var randomizer = new Random();
-            return new Location(randomizer.Next(this._mazeSize), randomizer.Next(this._mazeSize));
+            return new Location(this._randomizer.Next(this._mazeSize), this._randomizer.Next(this._mazeSize));
         }
     }
 }
