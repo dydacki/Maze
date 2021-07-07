@@ -1,4 +1,4 @@
-﻿namespace AtlasCopco.Maze.VerySimpleMaze.Test.Extensions
+﻿namespace AtlasCopco.Maze.VerySimpleMaze.Test.Helpers
 {
     using System;
 
