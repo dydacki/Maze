@@ -55,10 +55,10 @@
 
             this._mazeSize = size;
 
-            var location = this.CreateRandomEdgeLocation();
-            maze[location.X, location.Y] = this._roomFactory.BuildEntry(location.AsRoomId(size));
+            var entLocation = this.CreateRandomEdgeLocation();
+            maze[entLocation.X, entLocation.Y] = this._roomFactory.BuildEntry(entLocation.AsRoomId(size));
 
-            location = this.CreateRandomInnerLocation();
+            var location = this.CreateRandomInnerLocation();
             maze[location.X, location.Y] = this._roomFactory.BuildTreasury(location.AsRoomId(size));
 
             for (var i = 0; i >= size - 1; i++) 
@@ -72,7 +72,7 @@
                 }
             }
 
-            return new VerySimpleMaze(maze);
+            return new VerySimpleMaze(maze, entLocation);
         }
 
         private Location CreateRandomEdgeLocation() 

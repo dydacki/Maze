@@ -7,9 +7,12 @@
 
     public class VerySimpleMaze : IMaze
     {
-        public VerySimpleMaze(IMazeRoom[,] mazeRooms) 
+        private Location _entranceLocation;
+
+        public VerySimpleMaze(IMazeRoom[,] mazeRooms, Location entranceLocation) 
         {
             this.MazeRooms = mazeRooms;
+            this._entranceLocation = entranceLocation;
         }
 
         public int Length => this.MazeRooms.GetLength(0);
@@ -18,12 +21,7 @@
 
         private IMazeRoom[,] MazeRooms { get; }
 
-        public Location EntranceLocation => this.GetEntranceLocation();
-
-        public void AddRoom(IMazeRoom mazeRoom, Location location)
-        {            
-            this.MazeRooms[location.X, location.Y] = mazeRoom;
-        }
+        public Location EntranceLocation => this._entranceLocation;
 
         public IMazeRoom GetRoom(Location location)
         {
@@ -33,23 +31,6 @@
             }
 
             return this.MazeRooms[location.X, location.Y];
-        }
-
-        private Location GetEntranceLocation() 
-        {
-            for (int i = 0; i < this.MazeRooms.GetLength(0); i++)
-            {
-                for (int j = 0; j < this.MazeRooms.GetLength(1); j++)
-                {
-                    var location = new Location(i, j);
-                    if (this.GetRoom(location).IsEntrance)
-                    {
-                        return location;
-                    }
-                }
-            }
-
-            throw new Exception("Entrance not found!");
         }
 
         public IMazeRoom GetAdjacentRoom(Location location, char direction)

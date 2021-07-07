@@ -6,16 +6,6 @@
     public interface IMaze
     {
         /// <summary>
-        /// Adds an instance of the <see cref="IMazeRoom"/> to the instance of the <see cref="IMaze"/> 
-        /// on a specified position.
-        /// </summary>
-        /// <param name="mazeRoom">
-        /// An instance of the <see cref="IMaze"/> to be added.
-        /// </param>
-        /// <param name="location">The location of the <see cref="IMazeRoom"/> being added to the maze.</param>
-        void AddRoom(IMazeRoom mazeRoom, Location location);
-
-        /// <summary>
         /// Gets an instance of the <see cref="IMazeRoom"/> from a specified position of the <see cref="IMaze"/>.
         /// </summary>
         /// <param name="location">The location of the <see cref="IMazeRoom"/> to retrieve.</param>
