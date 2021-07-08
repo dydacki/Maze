@@ -34,6 +34,9 @@
             }
         }
 
+        /// <summary>
+        /// Gets the room description.
+        /// </summary>
         public override string GetDescription() 
         {            
             if (this._trapFired)
