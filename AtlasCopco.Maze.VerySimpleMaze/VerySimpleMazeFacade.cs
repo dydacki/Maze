@@ -23,13 +23,14 @@
         public void BuildMaze(int size)
         {
             this._maze = this._mazeFactory.BuildMaze(size);
+            this.LogMaze();
         }
 
         public bool CausesInjury(int roomId)
         {
             this.EnsureMazeInitialized();
             var room = this.EnsureValidRoom(roomId);
-            return room is MazeTrapRoom;
+            return room.CausesInjury;
         }
 
         public string GetDescription(int roomId)
@@ -81,6 +82,22 @@
             }
 
             return room;
+        }
+
+        private void LogMaze() 
+        {
+            var mazeLog = string.Empty;
+            for (var i = 0; i < this._maze.Length; i++)
+            {
+                for (var j = 0; j < this._maze.Width; j++) 
+                {
+                    mazeLog += "[{0}]".InjectInvariant(this._maze.GetRoom(new Location(i, j)).GetType().Name.PadRight(10));
+                }
+
+                mazeLog += Environment.NewLine;
+            }
+
+            Console.WriteLine(mazeLog);
         }
     }
 }

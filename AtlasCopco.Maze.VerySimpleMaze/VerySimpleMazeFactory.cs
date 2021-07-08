@@ -12,14 +12,13 @@
     {
         private const int MinimalMazeSize = 3;
 
-        private int _mazeSize;
         private VerySimpleMazeRoomFactory _roomFactory;
-        private Random _randomizer;
+        private ILocationGenerator _generator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VerySimpleMazeFactory"/> class.
         /// </summary>
-        public VerySimpleMazeFactory() : this(new VerySimpleMazeRoomFactory(), new Random())
+        public VerySimpleMazeFactory() : this(new VerySimpleMazeRoomFactory(), new VerySimpleLocationGenerator())
         {
         }
 
@@ -29,13 +28,13 @@
         /// <param name="roomFactory">
         /// An instance of the <see cref="VerySimpleMazeRoomFactory"/> class.
         /// </param>
-        /// <param name="randomizer">
-        /// An instance of the <see cref="Random"/> class.
+        /// <param name="generator">
+        /// An instance of a class implementing the <see cref="ILocationGenerator"/> interface.
         /// </param>
-        public VerySimpleMazeFactory(VerySimpleMazeRoomFactory roomFactory, Random randomizer) 
+        public VerySimpleMazeFactory(VerySimpleMazeRoomFactory roomFactory, ILocationGenerator generator) 
         {
             this._roomFactory = roomFactory;
-            this._randomizer = randomizer;
+            this._generator = generator;
         }
 
         /// <summary>
@@ -52,18 +51,15 @@
             }
 
             var maze = new IMazeRoom[size, size];
-
-            this._mazeSize = size;
-
-            var entLocation = this.CreateRandomEdgeLocation();
+            var entLocation = this._generator.GenerateEdgeLocation(size);
             maze[entLocation.X, entLocation.Y] = this._roomFactory.BuildEntrance(entLocation.AsRoomId(size));
 
-            var location = this.CreateRandomInnerLocation();
+            var location = this._generator.GenerateInnerLocation(size);
             maze[location.X, location.Y] = this._roomFactory.BuildTreasury(location.AsRoomId(size));
 
-            for (var i = 0; i >= size - 1; i++) 
+            for (var i = 0; i < size ; i++) 
             {
-                for (var j = 0; j >= size - 1; j++) 
+                for (var j = 0; j < size; j++) 
                 {
                     if (maze[i, j] == null)
                     {
@@ -73,22 +69,6 @@
             }
 
             return new VerySimpleMaze(maze, entLocation);
-        }
-
-        private Location CreateRandomEdgeLocation() 
-        {            
-            var x = this._randomizer.Next(this._mazeSize);
-            if (x != 0) 
-            {
-                return new Location(x, 0);
-            }
-
-            return new Location(x, this._randomizer.Next(this._mazeSize));
-        }
-
-        private Location CreateRandomInnerLocation()
-        {
-            return new Location(this._randomizer.Next(1, this._mazeSize - 1), this._randomizer.Next(1, this._mazeSize - 1));
         }
     }
 }

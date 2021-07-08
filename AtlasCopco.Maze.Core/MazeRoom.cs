@@ -8,7 +8,7 @@
     /// Exposes basic features of a maze room the player can get in to.
     /// </summary>
     public abstract class MazeRoom : IMazeRoom
-    {
+    {        
         protected string _description;
 
         /// <summary>
@@ -62,6 +62,11 @@
         /// Gets or sets the value indicating if the room has a treasure.
         /// </summary>
         public bool HasTreasure { get; set; }
+
+        /// <summary>
+        /// Gets the value indicating if the room causes an injury.
+        /// </summary>
+        public virtual bool CausesInjury => false;
 
         /// <summary>
         /// Gets or sets the traps of the room.

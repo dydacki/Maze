@@ -1,21 +1,18 @@
 ﻿namespace AtlasCopco.Maze.VerySimpleMaze.Test
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
     using AtlasCopco.Maze.Core;
-    using AtlasCopco.Maze.VerySimpleMaze;
+    using AtlasCopco.Maze.VerySimpleMaze;    
     using AtlasCopco.Maze.VerySimpleMaze.Rooms;
     using AtlasCopco.Maze.VerySimpleMaze.Rooms.Traps;
-    using Moq;
+    using AtlasCopco.Maze.VerySimpleMaze.Test.Utils;
     using NUnit.Framework;
 
     [TestFixture]
     public class VerySimpleMazeRoomFactoryFixture
     {
-        private int _counter;
-
         [Test]
         public void ShouldBuildMazeEntrance() 
         {
@@ -42,8 +39,8 @@
         public void ShouldBuildRegularRoomsInAlphabeticalSequence() 
         {
             var mazeRooms = new List<IMazeRoom>();
-            var roomFactory = new VerySimpleMazeRoomFactory(new VerySimpleRoomTrapFactory(), this.BuildMoqRandomizer());
-            for (var i = 0; i < 5; i++) 
+            var roomFactory = new VerySimpleMazeRoomFactory(new VerySimpleRoomTrapFactory(), SequentialRandomFactory.BuildSequentialRandomizer());
+            for (var i = 0; i < 4; i++) 
             {
                 mazeRooms.Add(roomFactory.BuildRandomRoom(i));
             }
@@ -55,7 +52,6 @@
             this.AssertForest(mazeRooms.ElementAt(1));
             this.AssertHills(mazeRooms.ElementAt(2));
             this.AssertMarsh(mazeRooms.ElementAt(3));
-            this.AssertDesert(mazeRooms.ElementAt(4));
         }
 
         public void AssertDesert(IMazeRoom desert) 
@@ -80,25 +76,6 @@
         {
             Assert.That(marsh, Is.TypeOf<Marsh>());
             Assert.That(marsh.Traps.First(), Is.TypeOf<SinkingTrap>());
-        }
-
-        private Random BuildMoqRandomizer() 
-        {
-            var randoMoq = new Mock<Random>();
-            randoMoq.Setup(rm => rm.Next(It.IsAny<int>()))
-                    .Returns<int>(c => this.MoqNext(c));
-                            
-            return randoMoq.Object;
-        }
-
-        private int MoqNext(int maxValue) 
-        {
-            if (this._counter == maxValue) 
-            {
-                this._counter = 0;
-            }
-
-            return this._counter++;
         }
     }
 }

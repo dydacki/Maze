@@ -4,6 +4,8 @@
 
     public abstract class MazeTrapRoom : MazeRoom
     {
+        private bool _trapFired;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MazeTrapRoom"/> class.
         /// </summary>
@@ -15,12 +17,29 @@
             this.Traps.Add(trap);
         }
 
-        public override string GetDescription() 
+        /// <summary>
+        /// Gets the value indicating if the room causes an injury.
+        /// </summary>
+        public override bool CausesInjury
         {
-            var trap = this.Traps.FirstOrDefault();
-            if (trap != null && trap.Fire())
+            get
             {
-                return string.Format($"{this.GetType().Name} - {this._description}\n{trap.BehaviorDescription}");
+                if (this.Traps.Any())
+                {
+                    this._trapFired = this.Traps.First().Fire();
+                    return this._trapFired;
+                }
+
+                return false;
+            }
+        }
+
+        public override string GetDescription() 
+        {            
+            if (this._trapFired)
+            {
+                var trapDescription = this.Traps.First().BehaviorDescription;
+                return string.Format($"{this.GetType().Name} - {this._description}\n{trapDescription}");
             }
 
             return base.GetDescription();

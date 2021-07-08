@@ -28,6 +28,11 @@
         bool HasTreasure { get; set; }
 
         /// <summary>
+        /// Gets the value indicating if the room causes an injury.
+        /// </summary>
+        bool CausesInjury { get; }
+
+        /// <summary>
         /// Gets or sets the traps of the room.
         /// </summary>
         IList<IMazeRoomTrap> Traps { get; set; }
