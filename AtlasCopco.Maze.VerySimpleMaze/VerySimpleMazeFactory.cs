@@ -14,6 +14,8 @@
 
         private VerySimpleMazeRoomFactory _roomFactory;
         private ILocationGenerator _generator;
+        private IMazeRoom[,] _maze;
+        private Location _entryLocation;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VerySimpleMazeFactory"/> class.
@@ -50,25 +52,41 @@
                     "The stage edge cannot be smaller than {0} elements.".InjectInvariant(MinimalMazeSize), nameof(size));
             }
 
-            var maze = new IMazeRoom[size, size];
-            var entLocation = this._generator.GenerateEdgeLocation(size);
-            maze[entLocation.X, entLocation.Y] = this._roomFactory.BuildEntrance(entLocation.AsRoomId(size));
+            this._maze = new IMazeRoom[size, size];
 
-            var location = this._generator.GenerateInnerLocation(size);
-            maze[location.X, location.Y] = this._roomFactory.BuildTreasury(location.AsRoomId(size));
+            this.BuildEntrance();
+            this.BuildTreasury();
+            this.BuildRooms();
 
-            for (var i = 0; i < size ; i++) 
+            return new VerySimpleMaze(this._maze, this._entryLocation);
+        }
+
+        private void BuildEntrance() 
+        {
+            var entLoc = this._generator.GenerateEdgeLocation(this._maze.GetLength(0));
+            this._maze[entLoc.X, entLoc.Y] = this._roomFactory.BuildEntrance(entLoc.AsRoomId(this._maze.GetLength(0)));
+            this._entryLocation = entLoc;
+        }
+
+        private void BuildTreasury()
+        {
+            var loc = this._generator.GenerateInnerLocation(this._maze.GetLength(0));
+            this._maze[loc.X, loc.Y] = this._roomFactory.BuildTreasury(loc.AsRoomId(this._maze.GetLength(0)));
+        }
+
+        private void BuildRooms()
+        {
+            var size = this._maze.GetLength(0);
+            for (var i = 0; i < size; i++)
             {
-                for (var j = 0; j < size; j++) 
+                for (var j = 0; j < size; j++)
                 {
-                    if (maze[i, j] == null)
+                    if (this._maze[i, j] == null)
                     {
-                        maze[i, j] = this._roomFactory.BuildRandomRoom(new Location(i, j).AsRoomId(size));
+                        this._maze[i, j] = this._roomFactory.BuildRandomRoom(new Location(i, j).AsRoomId(size));
                     }
                 }
             }
-
-            return new VerySimpleMaze(maze, entLocation);
         }
     }
 }
