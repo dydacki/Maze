@@ -49,5 +49,21 @@
                     throw new ArgumentException("Unknown direction: '{0}'".InjectInvariant(direction));
             }
         }
+
+        public override string ToString()
+        {
+            var mazeString = string.Empty;
+            for (var i = 0; i < this.Length; i++)
+            {
+                for (var j = 0; j < this.Width; j++)
+                {
+                    mazeString += "[{0}]".InjectInvariant(this.GetRoom(new Location(i, j)).GetType().Name.PadRight(10));
+                }
+
+                mazeString += Environment.NewLine;
+            }
+
+            return mazeString;
+        }
     }
 }

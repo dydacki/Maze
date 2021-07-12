@@ -1,6 +1,7 @@
 ﻿namespace AtlasCopco.Maze.VerySimpleMaze
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
 
@@ -11,6 +12,7 @@
     public class VerySimpleMazeRoomFactory
     {
         private IMazeRoomTrapFactory _trapFactory;
+        private IEnumerable<Type> _roomTypes;
         private Random _randomizer;
 
         public VerySimpleMazeRoomFactory() : this(new VerySimpleRoomTrapFactory(), new Random())
@@ -21,6 +23,7 @@
         {
             this._trapFactory = trapFactory;
             this._randomizer = randomizer;
+            this.InitializeRoomTypes();
         }
 
         public IMazeRoom BuildEntrance(int roomId)
@@ -40,14 +43,7 @@
 
         private Type GetRandomRoomType()
         {
-            var roomTypeNames = Assembly.GetExecutingAssembly()
-                                        .GetTypes()
-                                        .Where(t => t.Namespace == "AtlasCopco.Maze.VerySimpleMaze.Rooms"
-                                               && t.IsClass
-                                               && !new[] { typeof(Entrance), typeof(Treasury) }.Contains(t))
-                                        .OrderBy(t => t.Name);
-
-            return roomTypeNames.ElementAt(this._randomizer.Next(roomTypeNames.Count()));
+            return this._roomTypes.ElementAt(this._randomizer.Next(this._roomTypes.Count()));
         }
 
         private IMazeRoom CreateMazeRoomOfType(Type type, int roomId)
@@ -58,6 +54,16 @@
             }
 
             return Activator.CreateInstance(type, roomId) as IMazeRoom;
+        }
+
+        private void InitializeRoomTypes() 
+        {
+            this._roomTypes = Assembly.GetExecutingAssembly()
+                                      .GetTypes()
+                                      .Where(t => t.Namespace == "AtlasCopco.Maze.VerySimpleMaze.Rooms"
+                                             && t.IsClass
+                                             && !new[] { typeof(Entrance), typeof(Treasury) }.Contains(t))
+                                      .OrderBy(t => t.Name);
         }
     }
 }
