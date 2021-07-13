@@ -43,13 +43,13 @@
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="size"></param>
         /// <returns></returns>
         public IMaze BuildMaze(int size)
         {
-            if (size < MinimalMazeSize) 
+            if (size < MinimalMazeSize)
             {
                 throw new ArgumentOutOfRangeException(
                     "The stage edge cannot be smaller than {0} elements.".InjectInvariant(MinimalMazeSize), nameof(size));
@@ -59,7 +59,7 @@
             var maze = new IMazeRoom[size, size]
                 .AddRoom(this.BuildEntrance())
                 .AddRoom(this.BuildTreasury())
-                .AddRooms(this.BuildRooms());            
+                .AddRooms(this.BuildRooms());
 
             return new VerySimpleMaze(maze, this._usedLocations[0]);
         }
@@ -80,21 +80,17 @@
 
         private IEnumerable<IMazeRoom> BuildRooms()
         {
-            var rooms = new List<IMazeRoom>();
-            var comparer = new LocationComparer();
             for (var i = 0; i < this._size; i++)
             {
                 for (var j = 0; j < this._size; j++)
                 {
                     var location = new Location(i, j);
-                    if (!this._usedLocations.Contains(location, comparer))
+                    if (!this._usedLocations.Contains(location, new LocationComparer()))
                     {
-                        rooms.Add(this._roomFactory.BuildRandomRoom(location.AsRoomId(this._size)));
+                        yield return this._roomFactory.BuildRandomRoom(location.AsRoomId(this._size));
                     }
                 }
             }
-
-            return rooms;
         }
     }
 }

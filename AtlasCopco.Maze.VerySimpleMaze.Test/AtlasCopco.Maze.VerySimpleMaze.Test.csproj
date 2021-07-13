@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\CoreMazeTypesExtensionsFixture.cs" />
+    <Compile Include="Helpers\LocationComparerFixture.cs" />
     <Compile Include="Utils\DeadlyTrapFactory.cs" />
     <Compile Include="Utils\FakeLocationGenerator.cs" />
     <Compile Include="Utils\SequentialRandomFactory.cs" />

@@ -42,5 +42,16 @@
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => tooLargeIdentifier.AsLocation(mazeSize));
         }
+
+        [Test]
+        public void ShouldAddRoomToMazeRoomArray() 
+        {
+            var room = new VerySimpleMazeRoomFactory().BuildEntrance(1);
+            var maze = new IMazeRoom[4, 4];
+            var addedRoom = maze.AddRoom(room)[1, 0];
+
+            Assert.True(addedRoom.GetType() == room.GetType());
+            Assert.True(addedRoom.RoomId == room.RoomId);
+        }
     }
 }
