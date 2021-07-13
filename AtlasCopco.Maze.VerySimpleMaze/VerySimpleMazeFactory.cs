@@ -1,6 +1,8 @@
 ﻿namespace AtlasCopco.Maze.VerySimpleMaze
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     using AtlasCopco.Maze.Core;
     using AtlasCopco.Maze.VerySimpleMaze.Helpers;
@@ -12,10 +14,10 @@
     {
         private const int MinimalMazeSize = 3;
 
-        private VerySimpleMazeRoomFactory _roomFactory;
+        private int _size;
         private ILocationGenerator _generator;
-        private IMazeRoom[,] _maze;
-        private Location _entryLocation;
+        private VerySimpleMazeRoomFactory _roomFactory;
+        private IList<Location> _usedLocations;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VerySimpleMazeFactory"/> class.
@@ -37,6 +39,7 @@
         {
             this._roomFactory = roomFactory;
             this._generator = generator;
+            this._usedLocations = new List<Location>();
         }
 
         /// <summary>
@@ -52,41 +55,46 @@
                     "The stage edge cannot be smaller than {0} elements.".InjectInvariant(MinimalMazeSize), nameof(size));
             }
 
-            this._maze = new IMazeRoom[size, size];
+            this._size = size;
+            var maze = new IMazeRoom[size, size]
+                .AddRoom(this.BuildEntrance())
+                .AddRoom(this.BuildTreasury())
+                .AddRooms(this.BuildRooms());            
 
-            this.BuildEntrance();
-            this.BuildTreasury();
-            this.BuildRooms();
-
-            return new VerySimpleMaze(this._maze, this._entryLocation);
+            return new VerySimpleMaze(maze, this._usedLocations[0]);
         }
 
-        private void BuildEntrance() 
+        private IMazeRoom BuildEntrance() 
         {
-            var entLoc = this._generator.GenerateEdgeLocation(this._maze.GetLength(0));
-            this._maze[entLoc.X, entLoc.Y] = this._roomFactory.BuildEntrance(entLoc.AsRoomId(this._maze.GetLength(0)));
-            this._entryLocation = entLoc;
+            var entLoc = this._generator.GenerateEdgeLocation(this._size);
+            this._usedLocations.Add(entLoc);
+            return this._roomFactory.BuildEntrance(entLoc.AsRoomId(this._size));
         }
 
-        private void BuildTreasury()
+        private IMazeRoom BuildTreasury()
         {
-            var loc = this._generator.GenerateInnerLocation(this._maze.GetLength(0));
-            this._maze[loc.X, loc.Y] = this._roomFactory.BuildTreasury(loc.AsRoomId(this._maze.GetLength(0)));
+            var loc = this._generator.GenerateInnerLocation(this._size);
+            this._usedLocations.Add(loc);
+            return this._roomFactory.BuildTreasury(loc.AsRoomId(this._size));
         }
 
-        private void BuildRooms()
+        private IEnumerable<IMazeRoom> BuildRooms()
         {
-            var size = this._maze.GetLength(0);
-            for (var i = 0; i < size; i++)
+            var rooms = new List<IMazeRoom>();
+            var comparer = new LocationComparer();
+            for (var i = 0; i < this._size; i++)
             {
-                for (var j = 0; j < size; j++)
+                for (var j = 0; j < this._size; j++)
                 {
-                    if (this._maze[i, j] == null)
+                    var location = new Location(i, j);
+                    if (!this._usedLocations.Contains(location, comparer))
                     {
-                        this._maze[i, j] = this._roomFactory.BuildRandomRoom(new Location(i, j).AsRoomId(size));
+                        rooms.Add(this._roomFactory.BuildRandomRoom(location.AsRoomId(this._size)));
                     }
                 }
             }
+
+            return rooms;
         }
     }
 }

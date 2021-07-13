@@ -1,6 +1,7 @@
 ﻿namespace AtlasCopco.Maze.VerySimpleMaze.Helpers
 {
     using System;
+    using System.Collections.Generic;
 
     using AtlasCopco.Maze.Core;
 
@@ -55,6 +56,56 @@
             }
 
             return new Location(roomId % mazeSize, roomId / mazeSize);
+        }
+
+        /// <summary>
+        /// Adds an instance of the <see cref="IMazeRoom"/> 
+        /// to the array of <see cref="IMazeRoom"/> objects 
+        /// and returns this array.
+        /// </summary>
+        /// <param name="mazeRooms">
+        /// The array of <see cref="IMazeRoom"/> objects 
+        /// that the room is to be added to.
+        /// </param>
+        /// <param name="roomToAdd">
+        /// An instance of the <see cref="IMazeRoom"/> to be added.
+        /// </param>
+        /// <returns>
+        /// The array of <see cref="IMazeRoom"/> objects with a room added.
+        /// </returns>
+        public static IMazeRoom[,] AddRoom(this IMazeRoom[,] mazeRooms, IMazeRoom roomToAdd) 
+        {
+            var location = roomToAdd.RoomId.AsLocation(mazeRooms.GetLength(0));
+            mazeRooms[location.X, location.Y] = roomToAdd;
+            return mazeRooms;
+        }
+
+        /// <summary>
+        /// Adds a collection of the <see cref="IMazeRoom"/> objects
+        /// to the array of <see cref="IMazeRoom"/> objects.
+        /// and returns this array.
+        /// </summary>
+        /// <param name="mazeRooms">
+        /// The array of <see cref="IMazeRoom"/> objects 
+        /// that the collection of <see cref="IMazeRoom"/> objects 
+        /// is to be added to.
+        /// </param>
+        /// <param name="roomsToAdd">
+        /// A collection of the <see cref="IMazeRoom"/> objects to be added.
+        /// </param>
+        /// <returns>
+        /// The array of <see cref="IMazeRoom"/> objects with 
+        /// a collection of rooms added.
+        /// </returns>
+        public static IMazeRoom[,] AddRooms(this IMazeRoom[,] mazeRooms, IEnumerable<IMazeRoom> roomsToAdd)
+        {
+            foreach (var room in roomsToAdd)
+            {
+                var location = room.RoomId.AsLocation(mazeRooms.GetLength(0));
+                mazeRooms[location.X, location.Y] = room;
+            }
+
+            return mazeRooms;
         }
     }
 }
