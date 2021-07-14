@@ -43,10 +43,16 @@
         }
 
         /// <summary>
-        ///
+        /// Builds an instance of the <see cref="VerySimpleMaze"/> class
+        /// containing a maze entrance, a treasury and a collection
+        /// of randomly generated maze rooms.
         /// </summary>
-        /// <param name="size"></param>
-        /// <returns></returns>
+        /// <param name="size">
+        /// A size of the edge of a maze to be generated
+        /// </param>
+        /// <returns>
+        /// An instance of the <see cref="VerySimpleMaze"/> class.
+        /// </returns>
         public IMaze BuildMaze(int size)
         {
             if (size < MinimalMazeSize)
@@ -66,15 +72,13 @@
 
         private IMazeRoom BuildEntrance() 
         {
-            var entLoc = this._generator.GenerateEdgeLocation(this._size);
-            this._usedLocations.Add(entLoc);
+            var entLoc = this._generator.GenerateEdgeLocation(this._size).Tee(this.AddUsedLocation);
             return this._roomFactory.BuildEntrance(entLoc.AsRoomId(this._size));
         }
 
         private IMazeRoom BuildTreasury()
         {
-            var loc = this._generator.GenerateInnerLocation(this._size);
-            this._usedLocations.Add(loc);
+            var loc = this._generator.GenerateInnerLocation(this._size).Tee(this.AddUsedLocation);
             return this._roomFactory.BuildTreasury(loc.AsRoomId(this._size));
         }
 
@@ -91,6 +95,11 @@
                     }
                 }
             }
+        }
+
+        private void AddUsedLocation(Location location) 
+        {
+            this._usedLocations.Add(location);
         }
     }
 }

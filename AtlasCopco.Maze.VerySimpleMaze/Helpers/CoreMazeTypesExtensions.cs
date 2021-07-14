@@ -101,11 +101,24 @@
         {
             foreach (var room in roomsToAdd)
             {
-                var location = room.RoomId.AsLocation(mazeRooms.GetLength(0));
-                mazeRooms[location.X, location.Y] = room;
+                mazeRooms.AddRoom(room);
             }
 
             return mazeRooms;
+        }
+
+        /// <summary>
+        /// Performs a given operation on the object passed
+        /// and returns that object.
+        /// </summary>
+        /// <typeparam name="T">The type of the object to be passed.</typeparam>
+        /// <param name="t">The object on which the <paramref name="sideEffect"/> action is to be performed</param>
+        /// <param name="sideEffect">The operation to perform with <paramref name="t"/> object.</param>
+        /// <returns>The entry object.</returns>
+        public static T Tee<T>(this T t, Action<T> sideEffect) 
+        {
+            sideEffect(t);
+            return t;
         }
     }
 }
