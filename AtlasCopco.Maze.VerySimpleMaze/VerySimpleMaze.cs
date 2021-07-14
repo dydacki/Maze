@@ -7,21 +7,19 @@
 
     public class VerySimpleMaze : IMaze
     {
-        private Location _entranceLocation;
-
         public VerySimpleMaze(IMazeRoom[,] mazeRooms, Location entranceLocation) 
         {
             this.MazeRooms = mazeRooms;
-            this._entranceLocation = entranceLocation;
+            this.EntranceLocation = entranceLocation;
         }
 
         public int Length => this.MazeRooms.GetLength(0);
 
         public int Width => this.MazeRooms.GetLength(1);
 
-        private IMazeRoom[,] MazeRooms { get; }
+        public Location EntranceLocation { get; private set; }
 
-        public Location EntranceLocation => this._entranceLocation;
+        private IMazeRoom[,] MazeRooms { get; }
 
         public IMazeRoom GetRoom(Location location)
         {
