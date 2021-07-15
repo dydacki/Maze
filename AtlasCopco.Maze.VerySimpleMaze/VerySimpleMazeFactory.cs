@@ -17,7 +17,7 @@
         private int _size;
         private ILocationGenerator _generator;
         private VerySimpleMazeRoomFactory _roomFactory;
-        private IList<Location> _usedLocations;
+        private IList<int> _usedIds;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VerySimpleMazeFactory"/> class.
@@ -39,7 +39,7 @@
         {
             this._roomFactory = roomFactory;
             this._generator = generator;
-            this._usedLocations = new List<Location>();
+            this._usedIds = new List<int>();
         }
 
         /// <summary>
@@ -67,18 +67,18 @@
                 .AddRoom(this.BuildTreasury())
                 .AddRooms(this.BuildRooms());
 
-            return new VerySimpleMaze(maze, this._usedLocations[0]);
+            return new VerySimpleMaze(maze, this._usedIds[0].AsLocation(this._size));
         }
 
         private IMazeRoom BuildEntrance() 
         {
-            var entLoc = this._generator.GenerateEdgeLocation(this._size).Tee(this.AddUsedLocation);
+            var entLoc = this._generator.GenerateEdgeLocation(this._size).Tee(this.AddUsedId);
             return this._roomFactory.BuildEntrance(entLoc.AsRoomId(this._size));
         }
 
         private IMazeRoom BuildTreasury()
         {
-            var loc = this._generator.GenerateInnerLocation(this._size).Tee(this.AddUsedLocation);
+            var loc = this._generator.GenerateInnerLocation(this._size).Tee(this.AddUsedId);
             return this._roomFactory.BuildTreasury(loc.AsRoomId(this._size));
         }
 
@@ -88,18 +88,18 @@
             {
                 for (var j = 0; j < this._size; j++)
                 {
-                    var location = new Location(i, j);
-                    if (!this._usedLocations.Contains(location, new LocationComparer()))
+                    var roomId = new Location(i, j).AsRoomId(this._size);
+                    if (!this._usedIds.Contains(roomId))
                     {
-                        yield return this._roomFactory.BuildRandomRoom(location.AsRoomId(this._size));
+                        yield return this._roomFactory.BuildRandomRoom(roomId);
                     }
                 }
             }
         }
 
-        private void AddUsedLocation(Location location) 
+        private void AddUsedId(Location location) 
         {
-            this._usedLocations.Add(location);
+            this._usedIds.Add(location.AsRoomId(this._size));
         }
     }
 }

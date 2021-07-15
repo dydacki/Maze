@@ -44,7 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\CoreMazeTypesExtensions.cs" />
-    <Compile Include="Helpers\LocationComparer.cs" />
     <Compile Include="ILocationGenerator.cs" />
     <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Rooms\Desert.cs" />
